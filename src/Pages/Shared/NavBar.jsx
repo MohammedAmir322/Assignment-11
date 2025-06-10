@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../Context/AuthContext';
 import { NavLink } from 'react-router';
 
-
-// Example: Replace with your actual authentication logic
-const isLoggedIn = false; // Set to true to test logged-in state
-const user = { name: "John Doe" }; // Example user object
-
 const NavBar = () => {
+    const { user, logOutUser } = useContext(AuthContext);
+    const [showMenu, setShowMenu] = useState(false);
+
+    const handleLogout = () => {
+        logOutUser()
+            .then(() => {
+                console.log('User logged out successfully');
+            })
+            .catch(error => {
+                console.error('Error logging out:', error);
+            });
+    };
+
     const guestLinks = (
         <>
             <li><NavLink to="/">Home</NavLink></li>
             <li><NavLink to="/queries">Queries</NavLink></li>
-            <li><NavLink className="btn hover:bg-red-600" to="/register">Register </NavLink></li>
-            <li><NavLink className="btn hover:bg-red-600" to="/login">Log-in</NavLink></li>
+            <li><NavLink className="btn hover:bg-red-600 " to="/login">Log-in</NavLink></li>
+            <li><NavLink className="btn hover:bg-red-600" to="/register">Register</NavLink></li>
         </>
     );
 
@@ -23,9 +32,20 @@ const NavBar = () => {
             <li><NavLink to="/recommendations">Recommendations For Me</NavLink></li>
             <li><NavLink to="/my-queries">My Queries</NavLink></li>
             <li><NavLink to="/my-recommendations">My Recommendations</NavLink></li>
-            <li><NavLink to="/logout">Logout</NavLink></li>
+            <li>
+                <button className="btn hover:bg-red-600" onClick={handleLogout}>
+                    Logout
+                </button>
+            </li>
         </>
     );
+
+    // Avatar logic
+    const getInitial = (name, email) => {
+        if (name && name.length > 0) return name[0].toUpperCase();
+        if (email && email.length > 0) return email[0].toUpperCase();
+        return 'U';
+    };
 
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -40,7 +60,7 @@ const NavBar = () => {
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
-                        {isLoggedIn ? userLinks : guestLinks}
+                        {user ? userLinks : guestLinks}
                     </ul>
                 </div>
                 {/* Logo + Website Name */}
@@ -54,13 +74,50 @@ const NavBar = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    {isLoggedIn ? userLinks : guestLinks}
+                    {user ? userLinks : guestLinks}
                 </ul>
             </div>
             <div className="navbar-end">
-                {isLoggedIn ? (
-                    <span className="mr-2 font-semibold">Hello, {user.name}</span>
-                ) : null}
+                {user && (
+                    <div className="relative">
+                        <button
+                            className="avatar avatar-placeholder btn btn-ghost btn-circle"
+                            onClick={() => setShowMenu(!showMenu)}
+                        >
+                            <div className="bg-neutral text-neutral-content w-12 rounded-full flex items-center justify-center">
+                                {user.photoURL ? (
+                                    <img
+                                        src={user.photoURL}
+                                        alt="User"
+                                        className="w-12 h-12 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-2xl">
+                                        {getInitial(user.displayName, user.email)}
+                                    </span>
+                                )}
+                            </div>
+                        </button>
+                        {showMenu && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
+                                <div className="p-4 border-b">
+                                    <div className="font-bold">{user.displayName || user.email}</div>
+                                    <div className="text-xs text-gray-500">{user.email}</div>
+                                </div>
+                                <ul className="menu p-2">
+                                    <li>
+                                        <button
+                                            className="btn btn-error btn-sm w-full"
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

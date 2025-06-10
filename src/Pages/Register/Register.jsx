@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Lottie from 'lottie-react';
 import registerAnimation from '../../assets/Lotte/Animation - 1749119691760.json';
 import { useNavigate } from 'react-router';
+import { AuthContext } from '../../Context/AuthContext';
 
 const Register = () => {
+    const { createUser, logInWithGoogle } = useContext(AuthContext); // <-- add logInWithGoogle
     const navigate = useNavigate();
 
     // Handle form submission
@@ -18,10 +20,27 @@ const Register = () => {
         console.log('Email:', email);
         console.log('Password:', password);
         console.log('Photo URL:', photoURL);
-
-        // Add your registration logic here
-
         console.log('Form submitted');
+
+        createUser(email, password)
+            .then(result => {
+                console.log('User created:', result.user);
+            })
+            .catch(error => {
+                console.error('Error creating user:', error);
+            });
+    };
+
+    // Handle Google Sign In
+    const handleGoogleSignIn = () => {
+        logInWithGoogle()
+            .then(result => {
+                console.log('Google sign in success:', result.user);
+                navigate('/');
+            })
+            .catch(error => {
+                console.error('Google sign in error:', error);
+            });
     };
 
     return (
@@ -81,7 +100,10 @@ const Register = () => {
                     <button className="btn btn-primary w-full mt-2">Register</button>
                 </form>
                 <div className="divider my-4">OR</div>
-                <button className="btn btn-outline btn-google w-full flex items-center justify-center gap-2">
+                <button
+                    className="btn btn-outline btn-google w-full flex items-center justify-center gap-2"
+                    onClick={handleGoogleSignIn}
+                >
                     <svg width="20" height="20" viewBox="0 0 48 48">
                         <g>
                             <path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.1 33.4 29.6 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 5.1 29.6 3 24 3 12.9 3 4 11.9 4 23s8.9 20 20 20c11.1 0 19.7-7.9 19.7-19 0-1.3-.1-2.1-.2-3z"/>
