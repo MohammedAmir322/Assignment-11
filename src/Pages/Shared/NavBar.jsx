@@ -27,20 +27,22 @@ const NavBar = () => {
 
     const userLinks = (
         <>
-            <li><NavLink to="/">Home</NavLink></li>
+            <li ><NavLink to="/">Home</NavLink></li>
             <li><NavLink to="/queries">Queries</NavLink></li>
             <li><NavLink to="/recommendations">Recommendations For Me</NavLink></li>
             <li><NavLink to="/my-queries">My Queries</NavLink></li>
+            {/* <li><NavLink to="/add-Queries">Add Queries</NavLink></li> */}
+
             <li><NavLink to="/my-recommendations">My Recommendations</NavLink></li>
             <li>
-                <button className="btn hover:bg-red-600" onClick={handleLogout}>
+                <button className="btn  hover:bg-red-600" onClick={handleLogout}>
                     Logout
                 </button>
             </li>
         </>
     );
 
-    // Avatar logic
+    // Avatar 
     const getInitial = (name, email) => {
         if (name && name.length > 0) return name[0].toUpperCase();
         if (email && email.length > 0) return email[0].toUpperCase();
@@ -64,13 +66,28 @@ const NavBar = () => {
                     </ul>
                 </div>
                 {/* Logo + Website Name */}
-                <NavLink to="/" className="btn btn-ghost text-xl flex items-center gap-2">
-                    <svg width="32" height="32" viewBox="0 0 24 24" className="inline-block fill-primary">
+                <div className=" text-xl flex items-center gap-2 justify-center sm:justify-start">
+                    <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        className="inline-block fill-primary"
+                    >
                         <circle cx="12" cy="12" r="10" fill="#fff" />
-                        <text x="12" y="16" textAnchor="middle" fontSize="10" fill="#1976d2" fontFamily="Arial">PR</text>
+                        <text
+                            x="12"
+                            y="16"
+                            textAnchor="middle"
+                            fontSize="10"
+                            fill="#1976d2"
+                            fontFamily="Arial"
+                        >
+                            PR
+                        </text>
                     </svg>
-                    Product Recommend
-                </NavLink>
+                    <span className="text-accent sm:text-lg">Product Recommend</span>
+                </div>
+
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -104,10 +121,10 @@ const NavBar = () => {
                                     <div className="font-bold">{user.displayName || user.email}</div>
                                     <div className="text-xs text-gray-500">{user.email}</div>
                                 </div>
-                                <ul className="menu p-2">
+                                <ul className="menu p-2 ">
                                     <li>
                                         <button
-                                            className="btn btn-error btn-sm w-full"
+                                            className="btn btn-error btn-sm w-full "
                                             onClick={handleLogout}
                                         >
                                             Logout

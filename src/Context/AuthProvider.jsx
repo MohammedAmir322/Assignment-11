@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
             setLoading(false);
-            console.log('Current User:', currentUser);
+            // console.log('Current User:', currentUser);
         })
         // Cleanup subscription on unmount
         return () => unsubscribe();

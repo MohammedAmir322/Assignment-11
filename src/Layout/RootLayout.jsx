@@ -6,8 +6,12 @@ import NavBar from '../Pages/Shared/NavBar';
 const RootLayout = () => {
     return (
         <div>
-            <NavBar></NavBar>
-            <Outlet></Outlet>
+            <div className="sticky top-0 z-50 bg-base-100 shadow-sm max-w-11/12 mx-auto">
+                <NavBar ></NavBar>
+            </div>
+            <div  >
+                <Outlet></Outlet>
+            </div>
             <Footer></Footer>
         </div>
     );
