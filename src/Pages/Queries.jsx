@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router'; 
+import { useNavigate } from 'react-router';
 import { CiViewTable } from "react-icons/ci";
 import { MdTableRows } from "react-icons/md";
 import { LiaTableSolid } from "react-icons/lia";
+import axios from 'axios';
 
 const gridOptions = [
     { label: <CiViewTable />, value: 1 },
@@ -17,19 +18,21 @@ const Queries = () => {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
+ 
+    const loadQueries = async () => {
         setLoading(true);
-        fetch('http://localhost:3000/my-queries')
-            .then(res => res.json())
-            .then(data => {
-                // Sort descending by createdAt or date
-                const sorted = [...data].sort(
-                    (a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date)
-                );
-                setQueries(sorted);
-                setLoading(false);
-            })
-            .catch(() => setLoading(false));
+        try {
+            const res = await axios.get('http://localhost:3000/my-queries');
+            setQueries(res.data);
+        } catch (error) {
+            setQueries([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadQueries();
     }, []);
 
     const filteredQueries = queries.filter(query =>
@@ -76,7 +79,7 @@ const Queries = () => {
                     filteredQueries.map(query => (
                         <div key={query._id || query.id} className="bg-white rounded shadow p-6 flex flex-col justify-between">
                             <img
-                                src={query.image}
+                                src={query.productImage || query.image}
                                 alt={query.productName}
                                 className="w-full h-40 object-cover rounded mb-4"
                             />
@@ -86,7 +89,7 @@ const Queries = () => {
                                     <span className="font-bold">Product:</span> {query.productName}
                                 </div>
                                 <div className="text-sm text-gray-500 mb-1">
-                                    <span className="font-bold">Date:</span> {query.date}
+                                    <span className="font-bold">Date:</span> {query.createdAt ? new Date(query.createdAt).toLocaleDateString() : query.date}
                                 </div>
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Recommendation Count:</span> {query.recommendationCount ?? 0}

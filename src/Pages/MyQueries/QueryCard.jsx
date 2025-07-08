@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router'; 
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
-const QueryCard = ({ querie, onDelete }) => {
+const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
     const navigate = useNavigate(); 
+// console.log(querie);
 
     const handleDelete = () => {
         Swal.fire({
@@ -16,18 +18,21 @@ const QueryCard = ({ querie, onDelete }) => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:3000/queries/${querie._id}`, {
-                    method: 'DELETE',
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.deletedCount) {
+                axios.delete(`http://localhost:3000/queries/${querie._id}`)
+                    .then(res => {console.log(res.data.result.deletedCount);
+                    
+                        if (res.data.result.deletedCount) {
+                            console.log("under card",querie);
+                            
+                         handlesetNewQuery(querie._id)
+                            
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your query has been deleted.",
                                 icon: "success"
                             });
                             if (onDelete) onDelete(querie._id);
+                           
                         }
                     })
                     .catch(error => {
@@ -40,7 +45,6 @@ const QueryCard = ({ querie, onDelete }) => {
 
     const handleUpdate = () => {
         navigate(`/updateProduct/${querie._id}`);
-        
     };
 
     return (

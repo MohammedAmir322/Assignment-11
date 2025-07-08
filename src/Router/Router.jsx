@@ -32,39 +32,47 @@ const Router = createBrowserRouter([
             {
                 path: "/queries",
                 loader: () => fetch('http://localhost:3000/my-queries'),
-                element: <PrivetRouter><Queries></Queries></PrivetRouter>
+                Component: Queries,
+                // element: <PrivetRouter><Queries></Queries></PrivetRouter>
             },
             {
                 path: "/my-Queries",
-                loader: () => fetch('http://localhost:3000/queries'),
-                Component: MyQueries
+                // loader: () => fetch('http://localhost:3000/queries'),
+                element: <PrivetRouter><MyQueries></MyQueries></PrivetRouter>,
+               
             },
             {
                 path: "/add-queries",
-                Component: AddQueries
+                // Component: AddQueries,
+                element: <PrivetRouter><AddQueries></AddQueries></PrivetRouter>
             },
             {
                 path: "/updateProduct/:id",
                 loader: ({ params }) => fetch(`http://localhost:3000/queries/${params.id}`),
-                Component: UpdateProduct
+                // Component: UpdateProduct
+                element: <PrivetRouter><UpdateProduct></UpdateProduct></PrivetRouter>
             },
             {
                 path: "/queriesCardDetails/:id",
                 loader: ({ params }) => fetch(`http://localhost:3000/queries/${params.id}`),
-                Component: QueriesCardDetails
+                element: <PrivetRouter><QueriesCardDetails></QueriesCardDetails></PrivetRouter>,
+                // Component: QueriesCardDetails
             },
             {
                 path:"/recommend/:id",
                 loader: ({ params }) => fetch(`http://localhost:3000/my-queries/${params.id}`),
-                Component: Recommend,
+                element: <PrivetRouter><Recommend></Recommend></PrivetRouter>,
+                // Component: Recommend,
             },
             {
                 path:"/my-recommendations",
-                Component: MyRecommendations,
+                // Component: MyRecommendations,
+                element: <PrivetRouter><MyRecommendations></MyRecommendations></PrivetRouter>,
             },
             {
                 path:"/recommendations",
-                Component: MyQueryRecommendations,
+                // Component: MyQueryRecommendations,
+                element: <PrivetRouter><MyQueryRecommendations></MyQueryRecommendations></PrivetRouter>,
             },
 
             {

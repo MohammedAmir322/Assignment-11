@@ -1,13 +1,28 @@
-import React from 'react';
-
+import React, { useContext, useEffect, useState } from 'react';
 import QueryCard from './QueryCard';
-
-import { useLoaderData, useNavigate } from 'react-router'; 
+import { useLoaderData, useNavigate } from 'react-router';
+import { AuthContext } from '../../Context/AuthContext';
 
 const MyQueries = () => {
     const navigate = useNavigate();
-    const queries = useLoaderData();
-    console.log(queries);
+    const {user} =  useContext(AuthContext);
+    const [queries,setQueries] = useState([])
+    // const queries = useLoaderData();
+    // console.log(queries);
+
+    useEffect(() => {
+        fetch(`http://localhost:3000/only-my-queries?email=${user.email}`)
+            .then(res => res.json())
+            .then(data => setQueries(data))
+            .catch(err => console.log(err))
+    }, [user.email])
+
+    const handlesetNewQuery=(id)=>{
+ const newQuerys = queries.filter((q)=> q._id !== id)
+ setQueries(newQuerys)
+console.log(id);
+
+    }
 
     return (
         <div>
@@ -31,7 +46,7 @@ const MyQueries = () => {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 w-11/12 mx-auto'>
                 {
-                    queries.map(querie => <QueryCard key={querie._id} querie={querie} />) 
+                    queries?.map(querie => <QueryCard key={querie._id} querie={querie} handlesetNewQuery={handlesetNewQuery} />)
                 }
             </div>
         </div>

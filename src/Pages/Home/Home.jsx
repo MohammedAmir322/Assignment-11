@@ -133,6 +133,39 @@ const Home = () => {
                     Add Your Query
                 </Link>
             </section>
+      
+
+           
+            <section className="my-12 py-10 px-6 bg-gradient-to-r from-green-100 to-blue-100 rounded-xl shadow-lg flex flex-col items-center justify-center animate-fade-in-up">
+                <h3 className="text-2xl md:text-3xl font-bold text-green-700 mb-4 text-center">
+                    Featured Community Members
+                </h3>
+                <p className="text-gray-600 mb-8 text-center max-w-xl">
+                    Meet some of our most active and helpful members who make this platform a great place to get advice and share experiences!
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
+                    <div className="flex flex-col items-center bg-white rounded-lg shadow p-6">
+                        <img src="https://i.ibb.co/yFx4P9Rp/9.jpg" alt="User" className="w-20 h-20 rounded-full mb-3 border-4 border-green-300" />
+                        <div className="font-bold text-lg mb-1">Ahmed R.</div>
+                        <div className="text-sm text-gray-500 mb-2">Electronics Enthusiast</div>
+                        <p className="text-gray-600 text-center">“I love helping people find the best gadgets for their needs!”</p>
+                    </div>
+                    <div className="flex flex-col items-center bg-white rounded-lg shadow p-6">
+                        <img src="https://i.ibb.co/k2Vw57Cp/8.jpg" alt="User" className="w-20 h-20 rounded-full mb-3 border-4 border-green-300" />
+                        <div className="font-bold text-lg mb-1">Sara M.</div>
+                        <div className="text-sm text-gray-500 mb-2">Home Appliances Guru</div>
+                        <p className="text-gray-600 text-center">“Sharing my experience with kitchen appliances is my passion!”</p>
+                    </div>
+                    <div className="flex flex-col items-center bg-white rounded-lg shadow p-6">
+                        <img src="https://i.ibb.co/CsBQRKNZ/1.jpg" alt="User" className="w-20 h-20 rounded-full mb-3 border-4 border-green-300" />
+                        <div className="font-bold text-lg mb-1">Mohamed K.</div>
+                        <div className="text-sm text-gray-500 mb-2">Tech Reviewer</div>
+                        <p className="text-gray-600 text-center">“I enjoy reviewing products and helping others make smart choices.”</p>
+                    </div>
+                </div>
+            </section>
+
+
 
 
         </div>

@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import Lottie from 'lottie-react';
 import registerAnimation from '../../assets/Lotte/Animation - 1749119691760.json';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../../Context/AuthContext';
 import { FcGoogle } from "react-icons/fc";
 const Register = () => {
     const { createUser, logInWithGoogle } = useContext(AuthContext); // <-- add logInWithGoogle
     const navigate = useNavigate();
+    const location = useLocation()
 
     // Handle form submission
     const handleSubmit = e => {
@@ -25,6 +26,7 @@ const Register = () => {
         createUser(email, password)
             .then(result => {
                 console.log('User created:', result.user);
+                navigate(location.state || '/');
             })
             .catch(error => {
                 console.error('Error creating user:', error);
@@ -36,7 +38,7 @@ const Register = () => {
         logInWithGoogle()
             .then(result => {
                 console.log('Google sign in success:', result.user);
-                navigate('/');
+               navigate(location.state || '/');
             })
             .catch(error => {
                 console.error('Google sign in error:', error);

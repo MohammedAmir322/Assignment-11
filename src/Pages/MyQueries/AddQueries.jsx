@@ -1,54 +1,52 @@
-import React from 'react';
-import { useNavigate } from 'react-router'; // Fixed import
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import { AuthContext } from '../../Context/AuthContext';
 
 const AddQueries = () => {
+    const {user}= useContext(AuthContext)
     const navigate = useNavigate();
 
-    const handleAddQueries = e => {
+    const handleAddQueries = async e => {
         e.preventDefault();
         const form = e.target;
-        // const formData = new FormData(form);
-        // const queriesData = Object.fromEntries(formData.entries());
 
-        
+        // Collect form data
         const newQuery = {
-            // ...queriesData,
+            productName: form.productName.value,
+            productBrand: form.productBrand.value,
+            productImage: form.productImage.value,
+            queryTitle: form.queryTitle.value,
+            reason: form.reason.value,
+            email: user.email,
             createdAt: new Date().toISOString(),
             recommendationCount: 0,
         };
 
-        fetch('http://localhost:3000/queries', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newQuery),
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.insertedId) {
-                    Swal.fire({
-                        title: "Query Added Successfully!",
-                        icon: "success",
-                        text: "This new Query has been saved and published.",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                    form.reset();
-                    setTimeout(() => {
-                        navigate('/my-queries');
-                    }, 1500);
-                }
-            })
-            .catch((error) => {
+        try {
+            const response = await axios.post('http://localhost:3000/queries', newQuery);
+            if (response.data.insertedId) {
                 Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong while saving the query!",
-                    confirmButtonColor: "#d33",
+                    title: "Query Added Successfully!",
+                    icon: "success",
+                    text: "This new Query has been saved and published.",
+                    showConfirmButton: false,
+                    timer: 1500,
                 });
+                form.reset();
+                setTimeout(() => {
+                    navigate('/my-queries');
+                }, 1500);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong while saving the query!",
+                confirmButtonColor: "#d33",
             });
+        }
     };
 
     return (
@@ -103,5 +101,4 @@ const AddQueries = () => {
         </div>
     );
 };
-
 export default AddQueries;

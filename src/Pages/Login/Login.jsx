@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
 import Lottie from 'lottie-react';
 import loginLottie from '../../assets/Lotte/Login.json';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import { FcGoogle } from 'react-icons/fc';
 
@@ -10,7 +10,7 @@ const Login = () => {
     const navigate = useNavigate();
     const { logInUser, logInWithGoogle } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-
+const location = useLocation()
     const handleLogin = e => {
         e.preventDefault();
         setLoading(true);
@@ -27,7 +27,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                navigate('/');
+                navigate(location.state || '/');
             })
             .catch(error => {
                 setLoading(false);
@@ -51,7 +51,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                navigate('/');
+                navigate(location.state || '/');
             })
             .catch(error => {
                 setLoading(false);
