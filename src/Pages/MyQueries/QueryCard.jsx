@@ -18,7 +18,7 @@ const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:3000/queries/${querie._id}`)
+                axios.delete(`https://product-server-navy.vercel.app/queries/${querie._id}`)
                     .then(res => {console.log(res.data.result.deletedCount);
                     
                         if (res.data.result.deletedCount) {

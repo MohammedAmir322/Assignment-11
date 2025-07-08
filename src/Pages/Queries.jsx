@@ -22,7 +22,7 @@ const Queries = () => {
     const loadQueries = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:3000/my-queries');
+            const res = await axios.get('https://product-server-navy.vercel.app/my-queries');
             setQueries(res.data);
         } catch (error) {
             setQueries([]);

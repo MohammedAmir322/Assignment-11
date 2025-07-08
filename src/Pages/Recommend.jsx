@@ -17,10 +17,10 @@ const Recommend = () => {
 
     useEffect(() => {
         // Fetch query details
-        axios.get(`http://localhost:3000/my-queries/${id}`).then(res => setQuery(res.data));
+        axios.get(`https://product-server-navy.vercel.app/my-queries/${id}`).then(res => setQuery(res.data));
 
         // Fetch recommendations
-        axios.get(`http://localhost:3000/my-recommendations?email=${user?.email}`)
+        axios.get(`https://product-server-navy.vercel.app/my-recommendations?email=${user?.email}`)
             .then(res => setRecommendations(res.data));
     }, [id]);
 
@@ -41,10 +41,10 @@ const Recommend = () => {
         };
 
         // Save recommendation
-        await axios.post('http://localhost:3000/recommendations', payload);
+        await axios.post('https://product-server-navy.vercel.app/recommendations', payload);
 
         // Refetch updated recommendations
-        const updated = await axios.get(`http://localhost:3000/my-recommendations?email=${user?.email}`);
+        const updated = await axios.get(`https://product-server-navy.vercel.app/my-recommendations?email=${user?.email}`);
         setRecommendations(updated.data);
 
         // Clear form

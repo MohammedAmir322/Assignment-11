@@ -16,7 +16,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:3000/my-queries')
+        fetch('https://product-server-navy.vercel.app/my-queries')
             .then(res => res.json())
             .then(data => {
                 // Show only the 6 most recent

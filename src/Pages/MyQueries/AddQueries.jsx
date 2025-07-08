@@ -25,7 +25,7 @@ const AddQueries = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3000/queries', newQuery);
+            const response = await axios.post('https://product-server-navy.vercel.app/queries', newQuery);
             if (response.data.insertedId) {
                 Swal.fire({
                     title: "Query Added Successfully!",

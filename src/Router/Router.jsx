@@ -26,18 +26,18 @@ const Router = createBrowserRouter([
         children: [
             {
                 index: true,
-                loader: () => fetch('http://localhost:3000/my-queries'),
+                loader: () => fetch('https://product-server-navy.vercel.app/my-queries'),
                 Component: Home,
             },
             {
                 path: "/queries",
-                loader: () => fetch('http://localhost:3000/my-queries'),
+                loader: () => fetch('https://product-server-navy.vercel.app/my-queries'),
                 Component: Queries,
                 // element: <PrivetRouter><Queries></Queries></PrivetRouter>
             },
             {
                 path: "/my-Queries",
-                // loader: () => fetch('http://localhost:3000/queries'),
+                // loader: () => fetch('https://product-server-navy.vercel.app/queries'),
                 element: <PrivetRouter><MyQueries></MyQueries></PrivetRouter>,
                
             },
@@ -48,19 +48,19 @@ const Router = createBrowserRouter([
             },
             {
                 path: "/updateProduct/:id",
-                loader: ({ params }) => fetch(`http://localhost:3000/queries/${params.id}`),
+                loader: ({ params }) => fetch(`https://product-server-navy.vercel.app/queries/${params.id}`),
                 // Component: UpdateProduct
                 element: <PrivetRouter><UpdateProduct></UpdateProduct></PrivetRouter>
             },
             {
                 path: "/queriesCardDetails/:id",
-                loader: ({ params }) => fetch(`http://localhost:3000/queries/${params.id}`),
+                loader: ({ params }) => fetch(`https://product-server-navy.vercel.app/queries/${params.id}`),
                 element: <PrivetRouter><QueriesCardDetails></QueriesCardDetails></PrivetRouter>,
                 // Component: QueriesCardDetails
             },
             {
                 path:"/recommend/:id",
-                loader: ({ params }) => fetch(`http://localhost:3000/my-queries/${params.id}`),
+                loader: ({ params }) => fetch(`https://product-server-navy.vercel.app/my-queries/${params.id}`),
                 element: <PrivetRouter><Recommend></Recommend></PrivetRouter>,
                 // Component: Recommend,
             },

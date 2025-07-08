@@ -25,7 +25,7 @@ const UpdateProduct = () => {
     const handleUpdateQueries = (e) => {
         e.preventDefault();
 
-        fetch(`http://localhost:3000/queries/${querie._id}`, {
+        fetch(`https://product-server-navy.vercel.app/queries/${querie._id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

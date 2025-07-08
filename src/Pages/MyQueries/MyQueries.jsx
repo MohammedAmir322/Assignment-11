@@ -11,7 +11,7 @@ const MyQueries = () => {
     // console.log(queries);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/only-my-queries?email=${user.email}`)
+        fetch(`https://product-server-navy.vercel.app/only-my-queries?email=${user.email}`)
             .then(res => res.json())
             .then(data => setQueries(data))
             .catch(err => console.log(err))

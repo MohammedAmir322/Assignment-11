@@ -10,10 +10,10 @@ const QueriesCardDetails = () => {
     const [recommendations, setRecommendations] = useState([]);
 
     const fetchData = async () => {
-        const queryRes = await axios.get(`http://localhost:3000/queries/${id}`);
+        const queryRes = await axios.get(`https://product-server-navy.vercel.app/queries/${id}`);
         setQuery(queryRes.data);
 
-        const recs = await axios.get(`http://localhost:3000/recommendations?queryId=${id}`);
+        const recs = await axios.get(`https://product-server-navy.vercel.app/recommendations?queryId=${id}`);
         setRecommendations(recs.data);
     };
 

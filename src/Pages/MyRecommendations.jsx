@@ -11,7 +11,7 @@ const MyRecommendations = () => {
     const loadRecommendations = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:3000/my-recommendations?email=${user?.email}`);
+            const res = await axios.get(`https://product-server-navy.vercel.app/my-recommendations?email=${user?.email}`);
             setRecommendations(res.data);
         } catch (error) {
             setRecommendations([]);
@@ -39,7 +39,7 @@ const MyRecommendations = () => {
 
         if (confirm.isConfirmed) {
             try {
-                const deleteRes = await axios.delete(`http://localhost:3000/recommendations/${id}`);
+                const deleteRes = await axios.delete(`https://product-server-navy.vercel.app/recommendations/${id}`);
                 if (deleteRes.status === 200) {
                     await loadRecommendations();
                     Swal.fire('Deleted!', 'Your recommendation has been deleted.', 'success');
