@@ -5,7 +5,7 @@ import axios from 'axios';
 import { AuthContext } from '../../Context/AuthContext';
 
 const AddQueries = () => {
-    const {user}= useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const navigate = useNavigate();
 
     const handleAddQueries = async e => {
@@ -51,12 +51,20 @@ const AddQueries = () => {
 
     return (
         <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-xl shadow">
-            <button
-                className="btn btn-outline btn-lg px-8 text-lg shadow-md"
-                onClick={() => navigate('/')}
-            >
-                Go Back
-            </button>
+            <div >
+
+                <div class="relative inline-flex  group">
+                    <div
+                        class="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt">
+                    </div>
+                    <a href="/my-queries" title="Get quote now"
+                    // onClick={() => navigate('/')}
+                        class="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                        role="button">Go Back
+                    </a>
+                </div>
+            </div>
+           
             <h2 className="text-2xl font-bold mb-6 text-purple-700">Add a New Query</h2>
             <form onSubmit={handleAddQueries} className="flex flex-col gap-4">
                 <input

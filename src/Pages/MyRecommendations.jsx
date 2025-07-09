@@ -79,7 +79,7 @@ const MyRecommendations = () => {
                             recommendations.map((rec, idx) => (
                                 <tr key={rec._id}>
                                     <th>{idx + 1}</th>
-                                    <td>{rec.title}</td>
+                                    <td>{rec.queryTitle}</td>
                                     <td>
                                         <div className="flex items-center gap-2">
                                             <img
