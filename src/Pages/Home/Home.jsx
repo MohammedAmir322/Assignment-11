@@ -11,7 +11,7 @@ const stats = [
 
 
 const Home = () => {
-    
+
     const [recentQueries, setRecentQueries] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -33,51 +33,52 @@ const Home = () => {
         <div>
             {/* Slider Section */}
             <div className="carousel w-full rounded-lg shadow-2xl overflow-hidden">
-    <div id="slide1" className="carousel-item relative w-full">
-        <img 
-            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80"
-            className="" 
-            style={{ height: "500px", objectFit: "cover", width: "100%" }} 
-        />
-        <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-            <a href="#slide4" className="btn btn-circle">❮</a>
-            <a href="#slide2" className="btn btn-circle">❯</a>
-        </div>
-    </div>
-    <div id="slide2" className="carousel-item relative w-full">
-        <img
-            src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1470&q=80"
-            className=""
-            style={{ height: "500px", objectFit: "cover", width: "100%" }}
-        />
-        <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-            <a href="#slide1" className="btn btn-circle">❮</a>
-            <a href="#slide3" className="btn btn-circle">❯</a>
-        </div>
-    </div>
-    <div id="slide3" className="carousel-item relative w-full">
-        <img
-            src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1470&q=80"
-            className=""
-            style={{ height: "500px", objectFit: "cover", width: "100%" }}
-        />
-        <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-            <a href="#slide2" className="btn btn-circle">❮</a>
-            <a href="#slide4" className="btn btn-circle">❯</a>
-        </div>
-    </div>
-    <div id="slide4" className="carousel-item relative w-full">
-        <img
-            src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1470&q=80"
-            className=""
-            style={{ height: "500px", objectFit: "cover", width: "100%" }}
-        />
-        <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-            <a href="#slide3" className="btn btn-circle">❮</a>
-            <a href="#slide1" className="btn btn-circle">❯</a>
-        </div>
-    </div>
-</div>
+                <div id="slide1" className="carousel-item relative w-full">
+                    <img
+                        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80"
+                        className=""
+                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                    />
+                    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide4" className="btn btn-circle">❮</a>
+                        <a href="#slide2" className="btn btn-circle">❯</a>
+                    </div>
+                </div>
+                <div id="slide2" className="carousel-item relative w-full">
+                    <img
+                        src="https://i.ibb.co.com/8L8TtB8m/10241753.jpg"
+                        className=""
+                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                    />
+                    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide1" className="btn btn-circle">❮</a>
+                        <a href="#slide3" className="btn btn-circle">❯</a>
+                    </div>
+                </div>
+                <div id="slide3" className="carousel-item relative w-full">
+                    <img
+                        src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1470&q=80"
+                        className=""
+                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                    />
+                    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide2" className="btn btn-circle">❮</a>
+                        <a href="#slide4" className="btn btn-circle">❯</a>
+                    </div>
+                </div>
+                <div id="slide4" className="carousel-item relative w-full">
+                    <img
+                        src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1470&q=80"
+                        className=""
+                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                    />
+                    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide3" className="btn btn-circle">❮</a>
+                        <a href="#slide1" className="btn btn-circle">❯</a>
+                    </div>
+                </div>
+            </div>
+            
 
             {/* Recent Queries Section */}
             <div className="max-w-5xl mx-auto px-4 my-12">
@@ -133,9 +134,9 @@ const Home = () => {
                     Add Your Query
                 </Link>
             </section>
-      
 
-           
+
+
             <section className="my-12 py-10 px-6 bg-gradient-to-r from-green-100 to-blue-100 rounded-xl shadow-lg flex flex-col items-center justify-center animate-fade-in-up">
                 <h3 className="text-2xl md:text-3xl font-bold text-green-700 mb-4 text-center">
                     Featured Community Members

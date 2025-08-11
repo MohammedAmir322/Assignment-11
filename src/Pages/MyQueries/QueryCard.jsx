@@ -1,11 +1,11 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router'; 
+import { useNavigate, Link } from 'react-router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
-    const navigate = useNavigate(); 
-// console.log(querie);
+    const navigate = useNavigate();
+    // console.log(querie);
 
     const handleDelete = () => {
         Swal.fire({
@@ -19,20 +19,21 @@ const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.delete(`https://product-server-navy.vercel.app/queries/${querie._id}`)
-                    .then(res => {console.log(res.data.result.deletedCount);
-                    
+                    .then(res => {
+                        console.log(res.data.result.deletedCount);
+
                         if (res.data.result.deletedCount) {
-                            console.log("under card",querie);
-                            
-                         handlesetNewQuery(querie._id)
-                            
+                            console.log("under card", querie);
+
+                            handlesetNewQuery(querie._id)
+
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your query has been deleted.",
                                 icon: "success"
                             });
                             if (onDelete) onDelete(querie._id);
-                           
+
                         }
                     })
                     .catch(error => {
