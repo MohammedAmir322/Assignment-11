@@ -100,7 +100,7 @@ const Home = () => {
                                     <span className="font-bold">Product:</span> {query.productName}
                                 </div>
                                 <div className="text-sm text-gray-500 mb-1">
-                                    <span className="font-bold">Brand:</span> {query.productBrand}
+                                    <span className="font-bold">Brand:</span> {query.brand}
                                 </div>
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Recommendation:</span> {query.recommendationCount ?? 0}
