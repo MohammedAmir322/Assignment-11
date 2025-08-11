@@ -32,12 +32,12 @@ const Home = () => {
     return (
         <div>
             {/* Slider Section */}
-            <div className="carousel w-full rounded-lg shadow-2xl overflow-hidden">
+            <div className="carousel w-full h-200 rounded-lg shadow-2xl overflow-hidden">
                 <div id="slide1" className="carousel-item relative w-full">
                     <img
-                        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80"
+                        src="https://i.ibb.co.com/XfhJJnc5/Black-Photographic-Technological-Products-You-Tube-Thumbail.png"
                         className=""
-                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                        style={{  objectFit: "cover", width: "100%" }}
                     />
                     <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
                         <a href="#slide4" className="btn btn-circle">❮</a>
@@ -46,9 +46,9 @@ const Home = () => {
                 </div>
                 <div id="slide2" className="carousel-item relative w-full">
                     <img
-                        src="https://i.ibb.co.com/8L8TtB8m/10241753.jpg"
+                        src="https://i.ibb.co.com/60Y8Zdf5/White-and-Black-Photo-Digital-Marketing-Secrets-Youtube-Thumbnail.png"
                         className=""
-                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                        style={{  objectFit: "cover", width: "100%" }}
                     />
                     <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
                         <a href="#slide1" className="btn btn-circle">❮</a>
@@ -57,9 +57,9 @@ const Home = () => {
                 </div>
                 <div id="slide3" className="carousel-item relative w-full">
                     <img
-                        src="https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1470&q=80"
+                        src="https://i.ibb.co.com/Fq8nqYRp/Hitam-Merah-Review-Product-Laptop-Youtube-Thumbnail.png"
                         className=""
-                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                        style={{  objectFit: "cover", width: "100%" }}
                     />
                     <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
                         <a href="#slide2" className="btn btn-circle">❮</a>
@@ -68,9 +68,9 @@ const Home = () => {
                 </div>
                 <div id="slide4" className="carousel-item relative w-full">
                     <img
-                        src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1470&q=80"
+                        src="https://i.ibb.co.com/0pwwv9MN/Brown-White-Clean-Simple-Bold-Digital-Nomad-Vlog-Youtube-Thumbnail.png"
                         className=""
-                        style={{ height: "500px", objectFit: "cover", width: "100%" }}
+                        style={{  objectFit: "cover", width: "100%" }}
                     />
                     <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
                         <a href="#slide3" className="btn btn-circle">❮</a>

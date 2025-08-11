@@ -5,8 +5,8 @@ import { AuthContext } from '../../Context/AuthContext';
 
 const MyQueries = () => {
     const navigate = useNavigate();
-    const {user} =  useContext(AuthContext);
-    const [queries,setQueries] = useState([])
+    const { user } = useContext(AuthContext);
+    const [queries, setQueries] = useState([])
     // const queries = useLoaderData();
     // console.log(queries);
 
@@ -17,10 +17,10 @@ const MyQueries = () => {
             .catch(err => console.log(err))
     }, [user.email])
 
-    const handlesetNewQuery=(id)=>{
- const newQuerys = queries.filter((q)=> q._id !== id)
- setQueries(newQuerys)
-console.log(id);
+    const handlesetNewQuery = (id) => {
+        const newQuerys = queries.filter((q) => q._id !== id)
+        setQueries(newQuerys)
+        console.log(id);
 
     }
 
@@ -33,7 +33,7 @@ console.log(id);
                 <p className="text-lg md:text-xl text-white mb-6 text-center max-w-2xl">
                     Ask your product queries, get recommendations, and help others make better choices.
                 </p>
-                
+
                 <button
                     className="btn btn-accent btn-lg px-8 text-lg shadow-md"
                     onClick={() => navigate('/add-queries')}
