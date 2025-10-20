@@ -90,21 +90,38 @@ const Home = () => {
                         {recentQueries.map((query) => (
                             <div key={query._id || query.id} className="bg-white rounded-lg shadow p-5 hover:shadow-xl transition">
                                 <img
-                                    src={query.image}
+                                    src={query.productImage || query.image}
                                     alt={query.productName}
                                     className="w-full h-40 object-cover rounded mb-3"
-
                                 />
                                 <div className="font-semibold text-lg mb-1">{query.queryTitle}</div>
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Product:</span> {query.productName}
                                 </div>
                                 <div className="text-sm text-gray-400 mb-1">
-                                    <span className="font-bold">Brand:</span> {query.brand}
+                                    <span className="font-bold">Brand:</span> {query.productBrand || query.brand}
                                 </div>
+                                {query.category && (
+                                    <div className="text-sm text-gray-500 mb-1">
+                                        <span className="badge badge-outline badge-xs">{query.category}</span>
+                                    </div>
+                                )}
                                 <div className="text-sm text-gray-500 mb-1">
-                                    <span className="font-bold">Recommendation:</span> {query.recommendationCount ?? 0}
+                                    <span className="font-bold">Recommendations:</span> {query.recommendationCount ?? 0}
                                 </div>
+                                {query.isResolved && (
+                                    <span className="badge badge-success badge-xs mb-2">✅ Resolved</span>
+                                )}
+                                {query.tags && query.tags.length > 0 && (
+                                    <div className="mb-2">
+                                        <div className="flex flex-wrap gap-1">
+                                            {query.tags.slice(0, 3).map((tag, index) => (
+                                                <span key={index} className="badge badge-primary badge-xs">{tag}</span>
+                                            ))}
+                                            {query.tags.length > 3 && <span className="text-xs text-gray-400">+{query.tags.length - 3} more</span>}
+                                        </div>
+                                    </div>
+                                )}
                                 <Link to="/queries" className="btn btn-link btn-xs mt-2 px-0">See More</Link>
                             </div>
                         ))}

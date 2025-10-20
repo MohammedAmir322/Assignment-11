@@ -20,6 +20,8 @@ const Queries = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [tagFilter, setTagFilter] = useState(searchParams.get('tag') || '');
     const [categoryFilter, setCategoryFilter] = useState(searchParams.get('category') || '');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedTag, setSelectedTag] = useState('');
 
  
     const loadQueries = async () => {
@@ -57,6 +59,21 @@ const Queries = () => {
             return matchesText && matchesTag && matchesCategory;
         });
     }, [queries, search, tagFilter, categoryFilter]);
+    const filteredQueries = queries.filter(query => {
+        const matchesSearch = query.productName?.toLowerCase().includes(search.toLowerCase()) ||
+                            query.queryTitle?.toLowerCase().includes(search.toLowerCase());
+        const matchesCategory = !selectedCategory || query.category === selectedCategory;
+        const matchesTag = !selectedTag || (query.tags && query.tags.includes(selectedTag));
+        return matchesSearch && matchesCategory && matchesTag;
+    });
+
+    // Get unique categories and tags for filter options
+    const categories = [...new Set(queries.map(q => q.category).filter(Boolean))];
+    const allTags = [...new Set(queries.flatMap(q => q.tags || []))];
+    
+    const handleTagClick = (tag) => {
+        setSelectedTag(selectedTag === tag ? '' : tag);
+    };
 
     const gridClass = {
         1: "grid-cols-1",
@@ -107,6 +124,60 @@ const Queries = () => {
                             {opt.label}
                         </button>
                     ))}
+            <div className="flex flex-col gap-4 mb-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <input
+                        type="text"
+                        placeholder="Search by Product Name or Query Title..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="input input-bordered w-full max-w-md"
+                    />
+                    <div className="flex gap-2 mt-2 md:mt-0">
+                        {gridOptions.map(opt => (
+                            <button
+                                key={opt.value}
+                                type="button"
+                                className={`btn btn-sm btn-square flex items-center justify-center ${columns === opt.value ? 'btn-primary' : 'btn-outline'}`}
+                                onClick={() => setColumns(opt.value)}
+                                title={`${opt.value} Column${opt.value > 1 ? 's' : ''}`}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div className="flex flex-col md:flex-row gap-4">
+                    <select
+                        value={selectedCategory}
+                        onChange={e => setSelectedCategory(e.target.value)}
+                        className="select select-bordered w-full max-w-xs"
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map(category => (
+                            <option key={category} value={category}>{category}</option>
+                        ))}
+                    </select>
+                    <div className="flex flex-wrap gap-2">
+                        <span className="text-sm font-medium text-gray-600 self-center">Tags:</span>
+                        {allTags.slice(0, 10).map(tag => (
+                            <button
+                                key={tag}
+                                onClick={() => handleTagClick(tag)}
+                                className={`btn btn-xs ${selectedTag === tag ? 'btn-primary' : 'btn-outline'}`}
+                            >
+                                {tag}
+                            </button>
+                        ))}
+                        {selectedTag && (
+                            <button
+                                onClick={() => setSelectedTag('')}
+                                className="btn btn-xs btn-ghost"
+                            >
+                                Clear Tag
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className={`grid ${gridClass} gap-6`}>
@@ -127,6 +198,12 @@ const Queries = () => {
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Product:</span> {query.productName}
                                 </div>
+                                {query.category && (
+                                    <div className="text-sm text-gray-500 mb-1">
+                                        <span className="font-bold">Category:</span> 
+                                        <span className="badge badge-outline badge-sm ml-1">{query.category}</span>
+                                    </div>
+                                )}
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Date:</span> {query.createdAt ? new Date(query.createdAt).toLocaleDateString() : query.date}
                                 </div>
@@ -152,6 +229,21 @@ const Queries = () => {
                                     <span className="badge badge-info badge-outline">{query.category}</span>
                                 </div>
                             )}
+                                {query.tags && query.tags.length > 0 && (
+                                    <div className="mt-2">
+                                        <div className="flex flex-wrap gap-1">
+                                            {query.tags.map((tag, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => handleTagClick(tag)}
+                                                    className="badge badge-primary badge-sm cursor-pointer hover:badge-primary-focus"
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <div className="flex items-center justify-between mt-4">
                                 <button

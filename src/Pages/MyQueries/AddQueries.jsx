@@ -13,12 +13,15 @@ const AddQueries = () => {
         const form = e.target;
 
         // Collect form data
+        const tags = form.tags.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
         const newQuery = {
             productName: form.productName.value,
             productBrand: form.productBrand.value,
             productImage: form.productImage.value,
             queryTitle: form.queryTitle.value,
             reason: form.reason.value,
+            tags: tags,
+            category: form.category.value,
             email: user.email,
             createdAt: new Date().toISOString(),
             recommendationCount: 0,
@@ -30,6 +33,7 @@ const AddQueries = () => {
                     .filter(Boolean)
                 : [],
             category: form.category?.value || '',
+            isResolved: false,
         };
 
         try {
@@ -110,6 +114,23 @@ const AddQueries = () => {
                     rows={4}
                     required
                 />
+                <select
+                    name="category"
+                    className="select select-bordered w-full"
+                    required
+                >
+                    <option value="">Select Category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home Appliances">Home Appliances</option>
+                    <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                    <option value="Books & Media">Books & Media</option>
+                    <option value="Food & Beverages">Food & Beverages</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Health & Wellness">Health & Wellness</option>
+                    <option value="Other">Other</option>
+                </select>
                 <input
                     type="text"
                     name="tags"

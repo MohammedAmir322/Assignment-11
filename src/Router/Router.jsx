@@ -78,6 +78,7 @@ const Router = createBrowserRouter([
             {
                 path: "/user/:email",
                 element: <PrivetRouter><UserProfile /></PrivetRouter>,
+                element: <PrivetRouter><UserProfile></UserProfile></PrivetRouter>,
             },
 
             {
