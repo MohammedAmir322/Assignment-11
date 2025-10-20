@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 
 const NavBar = () => {
     const { user, logOutUser } = useContext(AuthContext);
     const [showMenu, setShowMenu] = useState(false);
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         logOutUser()
@@ -122,6 +123,17 @@ const NavBar = () => {
                                     <div className="text-xs text-gray-500">{user.email}</div>
                                 </div>
                                 <ul className="menu p-2 ">
+                                    <li>
+                                        <button
+                                            className="btn btn-ghost btn-sm w-full justify-start"
+                                            onClick={() => {
+                                                navigate(`/user/${user.email}`);
+                                                setShowMenu(false);
+                                            }}
+                                        >
+                                            👤 My Profile
+                                        </button>
+                                    </li>
                                     <li>
                                         <button
                                             className="btn btn-error btn-sm w-full "
