@@ -17,6 +17,10 @@ const Queries = () => {
     const [queries, setQueries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedTag, setSelectedTag] = useState('');
+    const [availableCategories, setAvailableCategories] = useState([]);
+    const [availableTags, setAvailableTags] = useState([]);
 
  
     const loadQueries = async () => {
@@ -24,6 +28,12 @@ const Queries = () => {
         try {
             const res = await axios.get('https://product-server-navy.vercel.app/my-queries');
             setQueries(res.data);
+            
+            // Extract unique categories and tags
+            const categories = [...new Set(res.data.map(q => q.category).filter(Boolean))];
+            const tags = [...new Set(res.data.flatMap(q => q.tags || []))];
+            setAvailableCategories(categories);
+            setAvailableTags(tags);
         } catch (error) {
             setQueries([]);
         } finally {
@@ -35,9 +45,14 @@ const Queries = () => {
         loadQueries();
     }, []);
 
-    const filteredQueries = queries.filter(query =>
-        query.productName?.toLowerCase().includes(search.toLowerCase())
-    );
+    const filteredQueries = queries.filter(query => {
+        const matchesSearch = query.productName?.toLowerCase().includes(search.toLowerCase()) ||
+                            query.queryTitle?.toLowerCase().includes(search.toLowerCase());
+        const matchesCategory = !selectedCategory || query.category === selectedCategory;
+        const matchesTag = !selectedTag || (query.tags && query.tags.includes(selectedTag));
+        
+        return matchesSearch && matchesCategory && matchesTag;
+    });
 
     const gridClass = {
         1: "grid-cols-1",
@@ -48,26 +63,66 @@ const Queries = () => {
     return (
         <div className="max-w-5xl mx-auto mt-8 p-4">
             <h2 className="text-2xl font-bold mb-4">All Queries</h2>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                <input
-                    type="text"
-                    placeholder="Search by Product Name..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    className="input input-bordered w-full max-w-md"
-                />
-                <div className="flex gap-2 mt-2 md:mt-0">
-                    {gridOptions.map(opt => (
+            <div className="space-y-4 mb-6">
+                {/* Search and Grid Controls */}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <input
+                        type="text"
+                        placeholder="Search by Product Name or Query Title..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="input input-bordered w-full max-w-md"
+                    />
+                    <div className="flex gap-2 mt-2 md:mt-0">
+                        {gridOptions.map(opt => (
+                            <button
+                                key={opt.value}
+                                type="button"
+                                className={`btn btn-sm btn-square flex items-center justify-center ${columns === opt.value ? 'btn-primary' : 'btn-outline'}`}
+                                onClick={() => setColumns(opt.value)}
+                                title={`${opt.value} Column${opt.value > 1 ? 's' : ''}`}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                
+                {/* Filter Controls */}
+                <div className="flex flex-wrap gap-4">
+                    <select
+                        value={selectedCategory}
+                        onChange={e => setSelectedCategory(e.target.value)}
+                        className="select select-bordered select-sm"
+                    >
+                        <option value="">All Categories</option>
+                        {availableCategories.map(category => (
+                            <option key={category} value={category}>{category}</option>
+                        ))}
+                    </select>
+                    
+                    <select
+                        value={selectedTag}
+                        onChange={e => setSelectedTag(e.target.value)}
+                        className="select select-bordered select-sm"
+                    >
+                        <option value="">All Tags</option>
+                        {availableTags.map(tag => (
+                            <option key={tag} value={tag}>{tag}</option>
+                        ))}
+                    </select>
+                    
+                    {(selectedCategory || selectedTag) && (
                         <button
-                            key={opt.value}
-                            type="button"
-                            className={`btn btn-sm btn-square flex items-center justify-center ${columns === opt.value ? 'btn-primary' : 'btn-outline'}`}
-                            onClick={() => setColumns(opt.value)}
-                            title={`${opt.value} Column${opt.value > 1 ? 's' : ''}`}
+                            onClick={() => {
+                                setSelectedCategory('');
+                                setSelectedTag('');
+                            }}
+                            className="btn btn-sm btn-outline"
                         >
-                            {opt.label}
+                            Clear Filters
                         </button>
-                    ))}
+                    )}
                 </div>
             </div>
             <div className={`grid ${gridClass} gap-6`}>
@@ -88,6 +143,28 @@ const Queries = () => {
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Product:</span> {query.productName}
                                 </div>
+                                {query.category && (
+                                    <div className="text-sm text-gray-500 mb-1">
+                                        <span className="font-bold">Category:</span> 
+                                        <span className="badge badge-primary badge-sm ml-1">{query.category}</span>
+                                    </div>
+                                )}
+                                {query.tags && query.tags.length > 0 && (
+                                    <div className="text-sm text-gray-500 mb-2">
+                                        <span className="font-bold">Tags:</span>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                            {query.tags.map((tag, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="badge badge-outline badge-xs cursor-pointer hover:badge-primary"
+                                                    onClick={() => setSelectedTag(tag)}
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Date:</span> {query.createdAt ? new Date(query.createdAt).toLocaleDateString() : query.date}
                                 </div>
