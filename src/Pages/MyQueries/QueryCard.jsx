@@ -69,11 +69,34 @@ const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
                     <div className="text-sm text-gray-500 mb-1">
                         <span className="font-bold">Brand:</span> {querie.productBrand}
                     </div>
+                    {querie.category && (
+                        <div className="text-sm text-gray-500 mb-1">
+                            <span className="font-bold">Category:</span> 
+                            <span className="badge badge-outline badge-sm ml-1">{querie.category}</span>
+                        </div>
+                    )}
+                    <div className="text-sm text-gray-500 mb-1">
+                        <span className="font-bold">Recommendations:</span> {querie.recommendationCount || 0}
+                    </div>
+                    {querie.isResolved && (
+                        <div className="mb-2">
+                            <span className="badge badge-success badge-sm">✅ Resolved</span>
+                        </div>
+                    )}
+                    {querie.tags && querie.tags.length > 0 && (
+                        <div className="mb-2">
+                            <div className="flex flex-wrap gap-1">
+                                {querie.tags.map((tag, index) => (
+                                    <span key={index} className="badge badge-primary badge-xs">{tag}</span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     <div className="text-sm text-gray-500 mb-1">
                         <span className="font-bold">Reason:</span> {querie.reason}
                     </div>
                     <div className="text-xs text-gray-400 mt-2">
-                        {querie.timestamp ? new Date(querie.timestamp).toLocaleString() : ""}
+                        {querie.createdAt ? new Date(querie.createdAt).toLocaleString() : querie.timestamp ? new Date(querie.timestamp).toLocaleString() : ""}
                     </div>
                 </div>
 
