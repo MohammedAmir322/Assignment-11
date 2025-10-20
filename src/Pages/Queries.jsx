@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CiViewTable } from "react-icons/ci";
 import { MdTableRows } from "react-icons/md";
@@ -17,6 +17,8 @@ const Queries = () => {
     const [queries, setQueries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedTag, setSelectedTag] = useState('');
 
  
     const loadQueries = async () => {
@@ -35,9 +37,27 @@ const Queries = () => {
         loadQueries();
     }, []);
 
-    const filteredQueries = queries.filter(query =>
-        query.productName?.toLowerCase().includes(search.toLowerCase())
-    );
+    const categories = useMemo(() => {
+        const set = new Set();
+        queries.forEach(q => { if (q.category) set.add(q.category); });
+        return Array.from(set);
+    }, [queries]);
+
+    const allTags = useMemo(() => {
+        const set = new Set();
+        queries.forEach(q => (q.tags || []).forEach(t => set.add(t)));
+        return Array.from(set);
+    }, [queries]);
+
+    const filteredQueries = useMemo(() => {
+        const term = search.toLowerCase();
+        return queries.filter(q => {
+            const matchesSearch = q.productName?.toLowerCase().includes(term) || q.queryTitle?.toLowerCase().includes(term);
+            const matchesCategory = selectedCategory ? q.category === selectedCategory : true;
+            const matchesTag = selectedTag ? (q.tags || []).includes(selectedTag) : true;
+            return matchesSearch && matchesCategory && matchesTag;
+        });
+    }, [queries, search, selectedCategory, selectedTag]);
 
     const gridClass = {
         1: "grid-cols-1",
@@ -49,13 +69,35 @@ const Queries = () => {
         <div className="max-w-5xl mx-auto mt-8 p-4">
             <h2 className="text-2xl font-bold mb-4">All Queries</h2>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                <input
-                    type="text"
-                    placeholder="Search by Product Name..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    className="input input-bordered w-full max-w-md"
-                />
+                <div className="flex flex-col md:flex-row gap-3 w-full">
+                    <input
+                        type="text"
+                        placeholder="Search by product or title..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="input input-bordered w-full max-w-md"
+                    />
+                    <select
+                        className="select select-bordered max-w-xs"
+                        value={selectedCategory}
+                        onChange={e => setSelectedCategory(e.target.value)}
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
+                    <select
+                        className="select select-bordered max-w-xs"
+                        value={selectedTag}
+                        onChange={e => setSelectedTag(e.target.value)}
+                    >
+                        <option value="">All Tags</option>
+                        {allTags.map(tag => (
+                            <option key={tag} value={tag}>{tag}</option>
+                        ))}
+                    </select>
+                </div>
                 <div className="flex gap-2 mt-2 md:mt-0">
                     {gridOptions.map(opt => (
                         <button
@@ -88,12 +130,31 @@ const Queries = () => {
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Product:</span> {query.productName}
                                 </div>
+                                {query.category && (
+                                    <div className="text-xs inline-block bg-purple-50 text-purple-700 px-2 py-0.5 rounded mb-1">
+                                        {query.category}
+                                    </div>
+                                )}
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Date:</span> {query.createdAt ? new Date(query.createdAt).toLocaleDateString() : query.date}
                                 </div>
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Recommendation Count:</span> {query.recommendationCount ?? 0}
                                 </div>
+                                {(query.tags || []).length > 0 && (
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                        {(query.tags || []).map(tag => (
+                                            <button
+                                                key={tag}
+                                                type="button"
+                                                className={`badge badge-outline hover:badge-primary ${selectedTag === tag ? 'badge-primary' : ''}`}
+                                                onClick={() => setSelectedTag(tag)}
+                                            >
+                                                #{tag}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <div className="flex items-center justify-between mt-4">
                                 <button

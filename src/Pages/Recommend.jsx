@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Navigate, useParams } from 'react-router';
+import React, { useEffect, useMemo, useState, useContext } from 'react';
+import { Link, Navigate, useParams } from 'react-router';
 import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
 
@@ -8,6 +8,10 @@ const Recommend = () => {
     const { user } = useContext(AuthContext);
     const [query, setQuery] = useState(null);
     const [recommendations, setRecommendations] = useState([]);
+    const isOwner = useMemo(() => {
+        if (!user || !query) return false;
+        return (query.userEmail || query.email) === user.email;
+    }, [user, query]);
     const [formData, setFormData] = useState({
         title: '',
         productName: '',
@@ -19,9 +23,18 @@ const Recommend = () => {
         // Fetch query details
         axios.get(`https://product-server-navy.vercel.app/my-queries/${id}`).then(res => setQuery(res.data));
 
-        // Fetch recommendations
-        axios.get(`https://product-server-navy.vercel.app/my-recommendations?email=${user?.email}`)
-            .then(res => setRecommendations(res.data));
+        // Fetch recommendations for this query
+        axios.get(`https://product-server-navy.vercel.app/recommendations?queryId=${id}`)
+            .then(res => {
+                const normalized = (res.data || []).map(r => ({ helpfulCount: 0, votedBy: [], isAccepted: false, ...r }));
+                const sorted = [...normalized].sort((a, b) => {
+                    const aAccepted = a.isAccepted ? 1 : 0;
+                    const bAccepted = b.isAccepted ? 1 : 0;
+                    if (bAccepted !== aAccepted) return bAccepted - aAccepted;
+                    return (b.helpfulCount || 0) - (a.helpfulCount || 0);
+                });
+                setRecommendations(sorted);
+            });
     }, [id]);
 
     const handleChange = (e) => {
@@ -44,8 +57,8 @@ const Recommend = () => {
         await axios.post('https://product-server-navy.vercel.app/recommendations', payload);
 
         // Refetch updated recommendations
-        const updated = await axios.get(`https://product-server-navy.vercel.app/my-recommendations?email=${user?.email}`);
-        setRecommendations(updated.data);
+        const updated = await axios.get(`https://product-server-navy.vercel.app/recommendations?queryId=${id}`);
+        setRecommendations(updated.data || []);
 
         // Clear form
         setFormData({ title: '', productName: '', productImage: '', reason: '' });
@@ -119,12 +132,23 @@ const Recommend = () => {
                     <p className="text-gray-500">No recommendations yet.</p>
                 ) : (
                     recommendations.map(rec => (
-                        <div key={rec._id} className="border p-4 mb-3 rounded">
+                        <div key={rec._id} className={`border p-4 mb-3 rounded ${rec.isAccepted ? 'border-green-500 bg-green-50' : ''}`}>
                             <p className="font-semibold">{rec.title}</p>
                             <p><strong>Product:</strong> {rec.productName}</p>
                             {rec.productImage && <img src={rec.productImage} alt="product" className="w-32 h-32 object-cover mt-2" />}
                             <p className="mt-1"><strong>Reason:</strong> {rec.reason}</p>
-                            <p className="mt-1"><strong>User:</strong> {rec.recommenderEmail}</p>
+                            <p className="mt-1"><strong>User:</strong>{' '}
+                                <Link className="link" to={`/user/${encodeURIComponent(rec.recommenderEmail)}`}>
+                                    {rec.recommenderName || rec.recommenderEmail}
+                                </Link>
+                            </p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <span className="text-sm">👍 Helpful: {rec.helpfulCount || 0}</span>
+                                {isOwner && !rec.isAccepted && (
+                                    <button className="btn btn-xs btn-outline">Mark as Best</button>
+                                )}
+                                {rec.isAccepted && <span className="badge badge-success">Best Solution</span>}
+                            </div>
                             <p className="text-sm text-gray-500 mt-2">
                                 By {rec.recommenderName} on {rec.createdAt ? new Date(rec.createdAt).toLocaleString() : ''}
                             </p>

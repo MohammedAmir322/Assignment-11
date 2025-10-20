@@ -13,6 +13,12 @@ const AddQueries = () => {
         const form = e.target;
 
         // Collect form data
+        const rawTags = form.tags?.value || '';
+        const parsedTags = rawTags
+            .split(',')
+            .map(t => t.trim())
+            .filter(Boolean);
+
         const newQuery = {
             productName: form.productName.value,
             productBrand: form.productBrand.value,
@@ -20,6 +26,8 @@ const AddQueries = () => {
             queryTitle: form.queryTitle.value,
             reason: form.reason.value,
             email: user.email,
+            category: form.category?.value || 'Other',
+            tags: parsedTags,
             createdAt: new Date().toISOString(),
             recommendationCount: 0,
         };
@@ -88,6 +96,24 @@ const AddQueries = () => {
                     className="input input-bordered w-full"
                     required
                 />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <select name="category" className="select select-bordered w-full" defaultValue="">
+                        <option value="" disabled>Choose Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Home Appliances">Home Appliances</option>
+                        <option value="Beauty">Beauty</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Books">Books</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input
+                        type="text"
+                        name="tags"
+                        placeholder="Tags (comma-separated, e.g., gaming, budget)"
+                        className="input input-bordered w-full"
+                    />
+                </div>
                 <input
                     type="text"
                     name="queryTitle"
