@@ -13,6 +13,9 @@ const AddQueries = () => {
         const form = e.target;
 
         // Collect form data
+        const tagsInput = form.tags.value.trim();
+        const tagsArray = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+        
         const newQuery = {
             productName: form.productName.value,
             productBrand: form.productBrand.value,
@@ -22,6 +25,8 @@ const AddQueries = () => {
             email: user.email,
             createdAt: new Date().toISOString(),
             recommendationCount: 0,
+            tags: tagsArray,
+            category: form.category.value,
         };
 
         try {
@@ -101,6 +106,28 @@ const AddQueries = () => {
                     className="textarea textarea-bordered w-full"
                     rows={4}
                     required
+                />
+                <select
+                    name="category"
+                    className="select select-bordered w-full"
+                    required
+                >
+                    <option value="">Select a Category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home Appliances">Home Appliances</option>
+                    <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                    <option value="Food & Beverages">Food & Beverages</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Books & Media">Books & Media</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input
+                    type="text"
+                    name="tags"
+                    placeholder="Tags (comma-separated, e.g., laptop, gaming, budget-friendly)"
+                    className="input input-bordered w-full"
                 />
                 <button className="btn btn-primary mt-2" type="submit">
                     Add Query

@@ -123,6 +123,15 @@ const NavBar = () => {
                                 </div>
                                 <ul className="menu p-2 ">
                                     <li>
+                                        <NavLink 
+                                            to={`/profile/${user.email}`}
+                                            onClick={() => setShowMenu(false)}
+                                            className="btn btn-ghost btn-sm w-full justify-start"
+                                        >
+                                            My Profile
+                                        </NavLink>
+                                    </li>
+                                    <li>
                                         <button
                                             className="btn btn-error btn-sm w-full "
                                             onClick={handleLogout}
