@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
 import { CiViewTable } from "react-icons/ci";
 import { MdTableRows } from "react-icons/md";
 import { LiaTableSolid } from "react-icons/lia";
@@ -17,6 +17,9 @@ const Queries = () => {
     const [queries, setQueries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [tagFilter, setTagFilter] = useState(searchParams.get('tag') || '');
+    const [categoryFilter, setCategoryFilter] = useState(searchParams.get('category') || '');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
 
@@ -24,7 +27,11 @@ const Queries = () => {
     const loadQueries = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('https://product-server-navy.vercel.app/my-queries');
+            const qs = new URLSearchParams();
+            if (tagFilter) qs.set('tag', tagFilter);
+            if (categoryFilter) qs.set('category', categoryFilter);
+            const url = `https://product-server-navy.vercel.app/my-queries${qs.toString() ? `?${qs.toString()}` : ''}`;
+            const res = await axios.get(url);
             setQueries(res.data);
         } catch (error) {
             setQueries([]);
@@ -35,8 +42,23 @@ const Queries = () => {
 
     useEffect(() => {
         loadQueries();
-    }, []);
+    }, [tagFilter, categoryFilter]);
 
+    useEffect(() => {
+        const next = new URLSearchParams();
+        if (tagFilter) next.set('tag', tagFilter);
+        if (categoryFilter) next.set('category', categoryFilter);
+        setSearchParams(next);
+    }, [tagFilter, categoryFilter, setSearchParams]);
+
+    const filteredQueries = useMemo(() => {
+        return queries.filter(query => {
+            const matchesText = query.productName?.toLowerCase().includes(search.toLowerCase());
+            const matchesTag = tagFilter ? Array.isArray(query.tags) && query.tags.includes(tagFilter) : true;
+            const matchesCategory = categoryFilter ? query.category === categoryFilter : true;
+            return matchesText && matchesTag && matchesCategory;
+        });
+    }, [queries, search, tagFilter, categoryFilter]);
     const filteredQueries = queries.filter(query => {
         const matchesSearch = query.productName?.toLowerCase().includes(search.toLowerCase()) ||
                             query.queryTitle?.toLowerCase().includes(search.toLowerCase());
@@ -62,6 +84,46 @@ const Queries = () => {
     return (
         <div className="max-w-5xl mx-auto mt-8 p-4">
             <h2 className="text-2xl font-bold mb-4">All Queries</h2>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <input
+                    type="text"
+                    placeholder="Search by Product Name..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    className="input input-bordered w-full max-w-md"
+                />
+                <div className="flex gap-3 items-center">
+                    <input
+                        type="text"
+                        placeholder="Filter by tag (e.g., gaming)"
+                        value={tagFilter}
+                        onChange={(e) => setTagFilter(e.target.value)}
+                        className="input input-bordered"
+                    />
+                    <select
+                        className="select select-bordered"
+                        value={categoryFilter}
+                        onChange={(e) => setCategoryFilter(e.target.value)}
+                    >
+                        <option value="">All Categories</option>
+                        <option>Electronics</option>
+                        <option>Fashion</option>
+                        <option>Home Appliances</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div className="flex gap-2 mt-2 md:mt-0">
+                    {gridOptions.map(opt => (
+                        <button
+                            key={opt.value}
+                            type="button"
+                            className={`btn btn-sm btn-square flex items-center justify-center ${columns === opt.value ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => setColumns(opt.value)}
+                            title={`${opt.value} Column${opt.value > 1 ? 's' : ''}`}
+                        >
+                            {opt.label}
+                        </button>
+                    ))}
             <div className="flex flex-col gap-4 mb-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <input
@@ -148,6 +210,25 @@ const Queries = () => {
                                 <div className="text-sm text-gray-500 mb-1">
                                     <span className="font-bold">Recommendation Count:</span> {query.recommendationCount ?? 0}
                                 </div>
+                            {Array.isArray(query.tags) && query.tags.length > 0 && (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {query.tags.map((tag, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            className="badge badge-outline badge-sm"
+                                            onClick={() => setTagFilter(tag)}
+                                        >
+                                            #{tag}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            {query.category && (
+                                <div className="mt-1">
+                                    <span className="badge badge-info badge-outline">{query.category}</span>
+                                </div>
+                            )}
                                 {query.tags && query.tags.length > 0 && (
                                     <div className="mt-2">
                                         <div className="flex flex-wrap gap-1">
