@@ -22,6 +22,14 @@ const AddQueries = () => {
             email: user.email,
             createdAt: new Date().toISOString(),
             recommendationCount: 0,
+            // Advanced: tags and category for filtering/browsing
+            tags: form.tags?.value
+                ? form.tags.value
+                    .split(',')
+                    .map(t => t.trim())
+                    .filter(Boolean)
+                : [],
+            category: form.category?.value || '',
         };
 
         try {
@@ -102,6 +110,19 @@ const AddQueries = () => {
                     rows={4}
                     required
                 />
+                <input
+                    type="text"
+                    name="tags"
+                    placeholder="Tags (comma-separated, e.g., laptop, gaming, budget-friendly)"
+                    className="input input-bordered w-full"
+                />
+                <select name="category" className="select select-bordered w-full">
+                    <option value="">Select Category (optional)</option>
+                    <option>Electronics</option>
+                    <option>Fashion</option>
+                    <option>Home Appliances</option>
+                    <option>Other</option>
+                </select>
                 <button className="btn btn-primary mt-2" type="submit">
                     Add Query
                 </button>

@@ -16,6 +16,7 @@ import UpdateProduct from "../Pages/MyQueries/UpdateProduct";
 import Recommend from "../Pages/Recommend";
 import MyRecommendations from "../Pages/MyRecommendations";
 import MyQueryRecommendations from "../Pages/MyQueryRecommendations";
+import UserProfile from "../Pages/UserProfile";
 
 
 const Router = createBrowserRouter([
@@ -73,6 +74,10 @@ const Router = createBrowserRouter([
                 path:"/recommendations",
                 // Component: MyQueryRecommendations,
                 element: <PrivetRouter><MyQueryRecommendations></MyQueryRecommendations></PrivetRouter>,
+            },
+            {
+                path: "/user/:email",
+                element: <PrivetRouter><UserProfile /></PrivetRouter>,
             },
 
             {
