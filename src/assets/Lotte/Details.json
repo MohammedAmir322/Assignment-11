@@ -1,0 +1,16 @@
+{
+  "_id": "67f5b8a3e1b2c3d4e5f6a7b8",
+  "productImage": "https://example.com/images/product.jpg",
+  "productName": "Example Laptop Model X",
+  "productBrand": "TechBrand",
+  "queryTitle": "Is there a better laptop for programming under $1000?",
+  "reason": "I am boycotting this brand due to their environmental policies and looking for a sustainable alternative.",
+  "userName": "John Doe",
+  "userEmail": "john.doe@example.com",
+  "userPhoto": "https://example.com/images/john_doe.png",
+  "createdAt": "2025-10-23T12:30:00.000Z",
+  "recommendationCount": 2,
+  "isResolved": true,
+  "tags": ["laptop", "programming", "budget", "sustainable"]
+}
+

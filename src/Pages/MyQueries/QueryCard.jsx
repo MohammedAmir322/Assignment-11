@@ -19,23 +19,23 @@ const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios.delete(`https://product-server-navy.vercel.app/queries/${querie._id}`)
-                    .then(res => {
-                        console.log(res.data.result.deletedCount);
+                .then(res => {
+                    console.log(res.data.result.deletedCount);
 
-                        if (res.data.result.deletedCount) {
-                            console.log("under card", querie);
+                    if (res.data.result.deletedCount) {
+                        console.log("under card", querie);
 
-                            handlesetNewQuery(querie._id)
+                        handlesetNewQuery(querie._id)
 
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: "Your query has been deleted.",
-                                icon: "success"
-                            });
-                            if (onDelete) onDelete(querie._id);
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your query has been deleted.",
+                            icon: "success"
+                        });
+                        if (onDelete) onDelete(querie._id);
 
-                        }
-                    })
+                    }
+                })
                     .catch(error => {
                         console.error('Delete failed:', error);
                         Swal.fire("Error", "There was a problem deleting the query.", "error");
@@ -71,7 +71,7 @@ const QueryCard = ({ querie, onDelete, handlesetNewQuery }) => {
                     </div>
                     {querie.category && (
                         <div className="text-sm text-gray-500 mb-1">
-                            <span className="font-bold">Category:</span> 
+                            <span className="font-bold">Category:</span>
                             <span className="badge badge-outline badge-sm ml-1">{querie.category}</span>
                         </div>
                     )}

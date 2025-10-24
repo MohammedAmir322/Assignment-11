@@ -21,8 +21,9 @@ const NavBar = () => {
         <>
             <li><NavLink to="/">Home</NavLink></li>
             <li><NavLink to="/queries">Queries</NavLink></li>
-            <li><NavLink className="btn hover:bg-red-600 " to="/login">Log-in</NavLink></li>
-            <li><NavLink className="btn hover:bg-red-600" to="/register">Register</NavLink></li>
+            <li><NavLink to="/blog">Blog</NavLink></li>
+            <li><NavLink  to="/login">Log-in</NavLink></li>
+            <li><NavLink to="/register">Register</NavLink></li>
         </>
     );
 
@@ -35,6 +36,8 @@ const NavBar = () => {
             {/* <li><NavLink to="/add-Queries">Add Queries</NavLink></li> */}
 
             <li><NavLink to="/my-recommendations">My Recommendations</NavLink></li>
+                        <li><NavLink to="/blog">Blog</NavLink></li>
+
             <li>
                 <button className="btn  hover:bg-red-600" onClick={handleLogout}>
                     Logout

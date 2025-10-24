@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router'; // Corrected import
+import QueryDetailsPage from '../../NewFeature/QueryDetailsPage';
 
 
 const stats = [
@@ -184,7 +185,7 @@ const Home = () => {
             </section>
 
 
-
+                {/* <QueryDetailsPage></QueryDetailsPage> */}
 
         </div>
     );

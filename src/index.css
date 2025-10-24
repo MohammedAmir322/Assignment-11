@@ -2,7 +2,7 @@
 @plugin "daisyui";
 
 
-.active{
-  background-color: red;
+.active {
+  text-decoration: underline;
 }
 
