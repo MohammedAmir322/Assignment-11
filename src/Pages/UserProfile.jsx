@@ -3,6 +3,50 @@ import { useParams, Link, useNavigate } from 'react-router';
 import axios from 'axios';
 import { AuthContext } from '../Context/AuthContext';
 
+// Gemini AI Configuration
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+
+// Updated Gemini AI Helper Function
+const generateAIInsights = async (userData) => {
+    if (!GEMINI_API_KEY) {
+        throw new Error('Please configure your Gemini API key in .env file');
+    }
+
+    const prompt = `
+        Analyze this user's profile data and provide an encouraging insight about their community contributions:
+        - Total Queries: ${userData.totalQueries}
+        - Total Recommendations: ${userData.totalRecommendations}
+        - Helpful Votes Received: ${userData.totalHelpfulVotes}
+        - Resolved Queries: ${userData.resolvedQueries}
+    `;
+
+    try {
+        const response = await fetch(GEMINI_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.message || 'Failed to connect to AI service');
+        }
+
+        const data = await response.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No insight generated';
+    } catch (error) {
+        console.error('AI API Error:', error);
+        throw new Error('Unable to generate insight at this time');
+    }
+};
+
 const UserProfile = () => {
 	const { email } = useParams();
 	const navigate = useNavigate();
@@ -12,6 +56,9 @@ const UserProfile = () => {
 	const [loading, setLoading] = useState(true);
 	const [activeTab, setActiveTab] = useState('queries');
 	const [profileData, setProfileData] = useState(null);
+	const [aiInsight, setAiInsight] = useState('');
+	const [loadingInsight, setLoadingInsight] = useState(false);
+	const [aiError, setAiError] = useState('');
 
 	useEffect(() => {
 		if (!email) return;
@@ -47,6 +94,28 @@ const UserProfile = () => {
 		};
 		load();
 	}, [email]);
+
+	// Updated generateInsight function
+	const generateInsight = async () => {
+		if (!stats || loadingInsight) return;
+		
+		setLoadingInsight(true);
+		setAiError('');
+		setAiInsight('');
+
+		try {
+			const insight = await generateAIInsights(stats);
+			setAiInsight(insight);
+		} catch (error) {
+			console.error('Generate insight error:', error);
+			setAiError(error.message || 'Failed to generate insight');
+			// Provide fallback content
+			setAiInsight('Unable to generate AI insight. Here\'s a summary instead: ' +
+				`This user has posted ${stats.totalQueries} queries and provided ${stats.totalRecommendations} recommendations.`);
+		} finally {
+			setLoadingInsight(false);
+		}
+	};
 
 	const stats = useMemo(() => {
 		const totalQueries = queries.length;
@@ -96,11 +165,34 @@ const UserProfile = () => {
 						</div>
 					</div>
 					<div className="flex-1">
-						<h1 className="text-3xl font-bold text-gray-800">{profileData.displayName}</h1>
+						<h1 className="text-3xl font-bold text-gray-800">{user.displayName}</h1>
 						<p className="text-gray-600">{profileData.email}</p>
 						{user && user.email === email && <span className="badge badge-primary mt-2">Your Profile</span>}
 					</div>
 				</div>
+			</div>
+
+			{/* Updated AI Insight Section */}
+			<div className="bg-white rounded-lg shadow-md p-6 mb-6">
+				<div className="flex justify-between items-center mb-4">
+					<h2 className="text-xl font-semibold">AI Profile Insight</h2>
+					<button 
+						onClick={generateInsight}
+						disabled={loadingInsight}
+						className={`btn ${loadingInsight ? 'loading' : ''} btn-primary btn-sm`}
+					>
+						{loadingInsight ? 'Generating...' : 'Generate Insight'}
+					</button>
+				</div>
+				{aiError ? (
+					<div className="text-red-600 text-sm mb-2">{aiError}</div>
+				) : aiInsight ? (
+					<div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+						<p className="text-gray-700 italic">{aiInsight}</p>
+					</div>
+				) : (
+					<p className="text-gray-500">Click the button to generate an AI insight about this profile.</p>
+				)}
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -196,7 +288,7 @@ const UserProfile = () => {
 												</div>
 												{rec.queryId && (
 													<div className="mt-2">
-														<Link className="btn btn-sm" to={`/queriesCardDetails/${rec._Id}`}>
+														<Link className="btn btn-sm" to={`/queriesCardDetails/${query._Id}`}>
 															View Thread
 														</Link>
 													</div>
